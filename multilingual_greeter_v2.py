@@ -1,5 +1,5 @@
 from typing import Dict
-
+import multilingual_greeter
 lang_dict = {
       1: 'English',
       2: 'Kannada',
@@ -38,7 +38,7 @@ def user_prompt():
     else :
         print("Please selct proper mode option")
 def admin():
-    admin_modes=int (input("1: To add languages, 2:update"))
+    admin_modes=int (input("1: Add  additional languages 2:Update greetings for existing languages"))
     if admin_modes == 1:
         lang_add=input("please enter thr lang to add")#kannaa
         ask_name_phrase=input("please enter what is your name  phrase in that langa") #nimm
@@ -51,6 +51,19 @@ def admin():
         lang_dict.update(lang_add)
         name_prompt_dict.update(ask_name_add)
         greetings_dict.update(ask_greet_add)
+    elif admin_modes ==2:
+        for k,v in greetings_dict.items():
+            print(f'{k} : {v}')
+        greet_key=int(input("Which greeting you would like update?, select key number")) #
+        if greetings_dict.get(greet_key) :
+            updated_greet=input("Enter the updated greeting") # dhanyaagaoin
+            greetings_dict.update({greet_key:updated_greet})
+        else :
+            print("You entered wrong key")
+        for k, v in greetings_dict.items():
+            print(f'{k} : {v}')
+
+
 
 
 
@@ -59,7 +72,18 @@ def admin():
 
 
 def user():
-    print("User optiuons")
+    multilingual_greeter.print_language_options(lang_dict)
+    lang_num=multilingual_greeter.language_input()
+    while multilingual_greeter.language_choice_is_valid(lang_dict,lang_num) is False:
+        print("You have enterred wrong selection, try again")
+        lang_num = multilingual_greeter.language_input()
+
+    name_lang=multilingual_greeter.get_name_input(name_prompt_dict, lang_num)
+    name=multilingual_greeter.name_input(name_lang)
+    multilingual_greeter.greet(name,greetings_dict,lang_num)
+
+
+
 
 
 
